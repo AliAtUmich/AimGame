@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AimGame</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="controlPanel">
+            <button id="startButton">Start</button>
+            <button id="resetButton" style="display:none;">Reset</button>
+
+            <div id="settingsMenu">
+                <label for="dpiInput">DPI:</label>
+                <input type="number" id="dpiInput" placeholder="e.g. 800">
+
+                <label for="sensitivityInput">Sensitivity:</label>
+                <input type="number" step="0.01" id="sensitivityInput" placeholder="e.g. 2.5">
+
+                <label for="crosshairStyle">Crosshair Style:</label>
+                <select id="crosshairStyle">
+                    <option value="default">Default</option>
+                    <option value="circle">Circle</option>
+                    <option value="dot">Dot</option>
+                    <option value="plus">Plus</option>
+                    <option value="plus-empty">Plus (Empty Middle)</option>
+                </select>
+
+                <label for="crosshairColor">Crosshair Color:</label>
+                <input type="color" id="crosshairColor" value="#000000">
+
+                <div id="dotSizeMenu">
+                    <label>Dot Size:</label>
+                    <button class="dotSizeOption" data-size="10">Small</button>
+                    <button class="dotSizeOption" data-size="20">Medium</button>
+                    <button class="dotSizeOption" data-size="30">Large</button>
+                </div>
+
+                <button id="applySettings">Apply Settings</button>
+            </div>
+
+            <div id="gameStats">
+                <div id="timer">Time: 0.0s</div>
+                <div id="accuracy">Accuracy: 0%</div>
+                <div id="counter">Dots Hit: 0 / 20</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
