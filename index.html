@@ -1,0 +1,87 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aim Game</title>
+    <link rel="icon" href="aim-logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Logo -->
+    <div id="logoContainer">
+        <img src="aim-logo.png" alt="Aim Game Logo" id="siteLogo">
+    </div>
+
+    <div id="gameContainer">
+        <!-- Canvas for the game -->
+        <canvas id="gameCanvas" width="1200" height="900"></canvas>
+
+        <!-- Control Panel -->
+        <div id="controlPanel">
+            <!-- Start and Reset Buttons -->
+            <button id="startButton">Start Game</button>
+            <button id="resetButton" style="display: none;">Reset Game</button>
+
+            <!-- Settings Menu -->
+            <div id="settingsMenu">
+                <h3>Settings</h3>
+
+                <label for="modeSelect">Game Mode:</label>
+                <select id="modeSelect">
+                    <option value="single">Single Target</option>
+                    <option value="multi-static">Multiple Targets (Static)</option>
+                    <option value="multi-moving">Multiple Targets (Moving)</option>
+                </select>
+
+                <label for="gameSelect">Select Game Sensitivity Profile:</label>
+                <select id="gameSelect">
+                    <option value="csgo">CS:GO</option>
+                    <option value="valorant">Valorant</option>
+                </select>
+
+                <label for="dpiInput">Mouse DPI:</label>
+                <input type="number" id="dpiInput" value="800">
+
+                <label for="sensitivityInput">In-Game Sensitivity:</label>
+                <input type="number" id="sensitivityInput" value="1.0" step="0.01">
+
+                <button id="applySettings">Apply Settings</button>
+            </div>
+
+            <!-- Crosshair Options -->
+            <div id="crosshairMenu">
+                <h3>Crosshair Options</h3>
+                <label for="crosshairStyle">Style:</label>
+                <select id="crosshairStyle">
+                    <option value="default">Default</option>
+                    <option value="circle">Circle</option>
+                    <option value="dot">Dot</option>
+                    <option value="plus">Plus</option>
+                    <option value="plus-empty">Plus (Empty Middle)</option>
+                </select>
+                <label for="crosshairColor">Color:</label>
+                <input type="color" id="crosshairColor" value="#000000">
+            </div>
+
+            <!-- Dot Size Menu -->
+            <div id="dotSizeMenu">
+                <h3>Dot Size</h3>
+                <button class="dotSizeOption active" data-size="10">Small</button>
+                <button class="dotSizeOption" data-size="20">Medium</button>
+                <button class="dotSizeOption" data-size="30">Large</button>
+            </div>
+
+            <!-- Game Stats -->
+            <div id="gameStats">
+                <div id="timer">Time: 0.0s</div>
+                <div id="counter">Dots Hit: 0 / 20</div>
+                <div id="accuracy">Accuracy: 0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
