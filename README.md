@@ -1,30 +1,28 @@
 # 🎯 AimGame
 
 A browser-based aim trainer built with **HTML**, **CSS**, and **JavaScript**.  
-Designed to help improve your reaction time, accuracy, and target tracking — right in your browser.
+Improve your reaction time, precision, and target tracking — right in your browser.
 
 ---
 
-## 🚀 Live Demo
-👉 [Play AimGame on GitHub Pages](https://AliAtUmich.github.io/AimGame/)
-
-*(If the link doesn’t work yet, go to **Settings → Pages** → Source: “Deploy from branch” → Branch: `main` → Save. It’ll appear here once deployed.)*
+## ▶️ [Play AimGame Now](https://aliatumich.github.io/AimGame/)
+*(Click the button above to play the live version hosted on GitHub Pages.)*
 
 ---
 
 ## 🕹️ Features
 - 🎯 **Game Modes**
-  - Single Target — hit one circle at a time (moves only on hit)
-  - Multiple Static — 20 stationary targets
-  - Multiple Moving — 20 targets bouncing around the screen  
+  - Single Target – hit one circle at a time (moves only on hit)
+  - Multiple Static – 20 stationary targets
+  - Multiple Moving – 20 moving targets bouncing around the canvas  
 - ⚙️ **Customizable Settings**
   - DPI & in-game sensitivity profiles (CS:GO or Valorant)
   - Crosshair styles and colors
-  - Dot size options (Small, Medium, Large)
+  - Adjustable dot size (Small, Medium, Large)
 - 🧮 **Stats Tracking**
   - Accuracy %
   - Dots Hit counter
-  - Timer
+  - Live timer display
 
 ---
 
