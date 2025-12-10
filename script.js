@@ -25,19 +25,19 @@ let crosshairY = canvas.height / 2;
 let sensitivity = 1.0;
 let isPointerLocked = false;
 let dotSize = 10;
-
 let dots = [];
 let gameMode = "single";
 let movingInterval = null;
 
-// Calculate sensitivity (normalized)
 const calculateSensitivity = (game, dpi, sens) => {
-    let base = (dpi / 800) * sens * 0.1;
-    if (game === "valorant") base *= 0.426;
-    return base;
+    const eDPI = dpi * sens;
+    if (game === "valorant") {
+        return (eDPI / 280) * 0.5;
+    } else {
+        return (eDPI / 800) * 0.5;
+    }
 };
 
-// Dot size selection
 dotSizeOptions.forEach(button => {
     button.addEventListener("click", e => {
         dotSize = parseInt(e.target.dataset.size);
@@ -46,13 +46,11 @@ dotSizeOptions.forEach(button => {
     });
 });
 
-// Random position
 const randomPosition = () => ({
     x: Math.random() * (canvas.width - 2 * dotSize) + dotSize,
     y: Math.random() * (canvas.height - 2 * dotSize) + dotSize
 });
 
-// Spawn dots
 const spawnDots = () => {
     dots = [];
     if (gameMode === "single") {
@@ -70,11 +68,9 @@ const spawnDots = () => {
     drawScene();
 };
 
-// Draw everything
 const drawScene = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw dots
     ctx.fillStyle = "red";
     dots.forEach(dot => {
         if (!dot.hit) {
@@ -85,55 +81,55 @@ const drawScene = () => {
         }
     });
 
-    // Draw crosshair
-    ctx.strokeStyle = crosshairColor.value;
-    ctx.fillStyle = crosshairColor.value;
-    ctx.lineWidth = 2;
+    if (gameStarted) {
+        ctx.strokeStyle = crosshairColor.value;
+        ctx.fillStyle = crosshairColor.value;
+        ctx.lineWidth = 2;
 
-    switch (crosshairStyle.value) {
-        case "default":
-            ctx.beginPath();
-            ctx.moveTo(crosshairX - 15, crosshairY);
-            ctx.lineTo(crosshairX + 15, crosshairY);
-            ctx.moveTo(crosshairX, crosshairY - 15);
-            ctx.lineTo(crosshairX, crosshairY + 15);
-            ctx.stroke();
-            break;
-        case "circle":
-            ctx.beginPath();
-            ctx.arc(crosshairX, crosshairY, 10, 0, Math.PI * 2);
-            ctx.stroke();
-            break;
-        case "dot":
-            ctx.beginPath();
-            ctx.arc(crosshairX, crosshairY, 5, 0, Math.PI * 2);
-            ctx.fill();
-            break;
-        case "plus":
-        case "plus-empty":
-            const arm = 10, gap = crosshairStyle.value === "plus-empty" ? 5 : 0;
-            ctx.beginPath();
-            ctx.moveTo(crosshairX - arm, crosshairY);
-            ctx.lineTo(crosshairX - gap, crosshairY);
-            ctx.moveTo(crosshairX + gap, crosshairY);
-            ctx.lineTo(crosshairX + arm, crosshairY);
-            ctx.moveTo(crosshairX, crosshairY - arm);
-            ctx.lineTo(crosshairX, crosshairY - gap);
-            ctx.moveTo(crosshairX, crosshairY + gap);
-            ctx.lineTo(crosshairX, crosshairY + arm);
-            ctx.stroke();
-            break;
+        switch (crosshairStyle.value) {
+            case "default":
+                ctx.beginPath();
+                ctx.moveTo(crosshairX - 15, crosshairY);
+                ctx.lineTo(crosshairX + 15, crosshairY);
+                ctx.moveTo(crosshairX, crosshairY - 15);
+                ctx.lineTo(crosshairX, crosshairY + 15);
+                ctx.stroke();
+                break;
+            case "circle":
+                ctx.beginPath();
+                ctx.arc(crosshairX, crosshairY, 10, 0, Math.PI * 2);
+                ctx.stroke();
+                break;
+            case "dot":
+                ctx.beginPath();
+                ctx.arc(crosshairX, crosshairY, 5, 0, Math.PI * 2);
+                ctx.fill();
+                break;
+            case "plus":
+            case "plus-empty":
+                const arm = 10;
+                const gap = crosshairStyle.value === "plus-empty" ? 5 : 0;
+                ctx.beginPath();
+                ctx.moveTo(crosshairX - arm, crosshairY);
+                ctx.lineTo(crosshairX - gap, crosshairY);
+                ctx.moveTo(crosshairX + gap, crosshairY);
+                ctx.lineTo(crosshairX + arm, crosshairY);
+                ctx.moveTo(crosshairX, crosshairY - arm);
+                ctx.lineTo(crosshairX, crosshairY - gap);
+                ctx.moveTo(crosshairX, crosshairY + gap);
+                ctx.lineTo(crosshairX, crosshairY + arm);
+                ctx.stroke();
+                break;
+        }
     }
 };
 
-// Smooth movement for moving mode
 const moveDots = () => {
     dots.forEach(dot => {
         if (!dot.hit) {
             dot.x += dot.vx;
             dot.y += dot.vy;
 
-            // Bounce off walls
             if (dot.x <= dotSize || dot.x >= canvas.width - dotSize) dot.vx *= -1;
             if (dot.y <= dotSize || dot.y >= canvas.height - dotSize) dot.vy *= -1;
         }
@@ -141,7 +137,6 @@ const moveDots = () => {
     drawScene();
 };
 
-// Handle mouse movement
 document.addEventListener("mousemove", e => {
     if (!isPointerLocked || !gameStarted) return;
     crosshairX += e.movementX * sensitivity;
@@ -151,7 +146,6 @@ document.addEventListener("mousemove", e => {
     drawScene();
 });
 
-// Handle clicks
 canvas.addEventListener("click", () => {
     if (!gameStarted) return;
     clicksMade++;
@@ -173,7 +167,6 @@ canvas.addEventListener("click", () => {
 
     if (gameMode === "single") {
         if (hitSomething) {
-            // Only move to new dot on a hit
             spawnDots();
         }
         if (clicksMade >= totalDots) endGame();
@@ -183,7 +176,6 @@ canvas.addEventListener("click", () => {
     }
 });
 
-// Accuracy and counter updates
 const updateAccuracy = () => {
     const acc = clicksMade ? (dotsHit / clicksMade) * 100 : 0;
     accuracyDiv.textContent = `Accuracy: ${acc.toFixed(2)}%`;
@@ -192,7 +184,6 @@ const updateCounter = () => {
     counterDiv.textContent = `Dots Hit: ${dotsHit} / ${totalDots}`;
 };
 
-// Timer
 const startTimer = () => {
     timerStart = performance.now();
     timerInterval = setInterval(() => {
@@ -202,22 +193,23 @@ const startTimer = () => {
 };
 const stopTimer = () => clearInterval(timerInterval);
 
-// Start game
 startButton.addEventListener("click", () => {
     gameMode = modeSelect.value;
     clicksMade = 0;
     dotsHit = 0;
     gameStarted = true;
+    crosshairX = canvas.width / 2;
+    crosshairY = canvas.height / 2;
     spawnDots();
     canvas.requestPointerLock();
     startTimer();
     if (gameMode === "multi-moving") {
-        movingInterval = setInterval(moveDots, 30); // smooth animation
+        movingInterval = setInterval(moveDots, 30);
     }
 });
 
-// End game
 const endGame = () => {
+    if (!gameStarted) return;
     gameStarted = false;
     stopTimer();
     clearInterval(movingInterval);
@@ -226,7 +218,6 @@ const endGame = () => {
     resetButton.style.display = "block";
 };
 
-// Reset game
 resetButton.addEventListener("click", () => {
     stopTimer();
     clearInterval(movingInterval);
@@ -237,18 +228,43 @@ resetButton.addEventListener("click", () => {
     timerDiv.textContent = "Time: 0.0s";
     accuracyDiv.textContent = "Accuracy: 0%";
     counterDiv.textContent = "Dots Hit: 0 / 20";
+    resetButton.style.display = "none";
+    drawScene();
 });
 
-// Pointer lock
+// FIX: Stop game when clicking off (pointer lock lost)
 document.addEventListener("pointerlockchange", () => {
     isPointerLocked = document.pointerLockElement === canvas;
+    
+    // Stop game if pointer lock is lost during gameplay
+    if (!isPointerLocked && gameStarted) {
+        stopTimer();
+        clearInterval(movingInterval);
+        gameStarted = false;
+        timerDiv.textContent += " (Paused)";
+    }
 });
 
-// Apply settings
 applySettings.addEventListener("click", () => {
     const game = gameSelect.value;
     const dpi = parseFloat(dpiInput.value);
     const sens = parseFloat(sensitivityInput.value);
     sensitivity = calculateSensitivity(game, dpi, sens);
-    alert(`Sensitivity applied: ${sensitivity.toFixed(3)}`);
+    
+    const originalText = applySettings.textContent;
+    applySettings.textContent = "✓ Applied!";
+    applySettings.style.backgroundColor = "#28a745";
+    
+    setTimeout(() => {
+        applySettings.textContent = originalText;
+        applySettings.style.backgroundColor = "";
+    }, 1500);
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    dpiInput.value = "800";
+    sensitivityInput.value = "1.0";
+    gameSelect.value = "csgo";
+    sensitivity = calculateSensitivity("csgo", 800, 1.0);
+    drawScene();
 });
